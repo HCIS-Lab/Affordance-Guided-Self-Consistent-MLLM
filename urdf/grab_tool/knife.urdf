@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<robot name="knife">
+    <link name="cube_knife">
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.03 0.03 0.03"/>
+            </geometry>    
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.03 0.03 0.03"/>
+            </geometry>    
+        </collision>
+    </link>
+    <joint name="joint_name" type="fixed">
+        <parent link="cube_knife"/>
+        <child link="knife"/>
+    </joint>
+    <link name="knife">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 1.57 0"/>
+            <geometry>
+                <mesh filename="knife.stl"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 1.57 0"/>
+            <geometry>
+                <mesh filename="knife.stl" />
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="0.5"/> 
+            <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001"/>
+        </inertial>
+    </link>
+</robot>

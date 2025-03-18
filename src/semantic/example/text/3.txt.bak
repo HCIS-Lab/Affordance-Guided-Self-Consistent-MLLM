@@ -1,0 +1,35 @@
+Put a scoop of red beans into the empty bowl.
+
+move_to_blue_bowl
+pull_bowl_closer
+move_to_white_bowl
+pull_bowl_closer
+grasp_spoon
+move_to_blue_bowl
+scoop
+move_to_gray_bowl
+drop_food
+put_spoon_back
+DONE
+
+white_bowl (with mung beans)
+blue_bowl (with red beans)
+gray_bowl (empty)
+
+scoop
+stir
+drop_food
+pull_bowl_closer
+open_dumbwaiter
+close_dumbwaiter
+start_dumbwaiter
+put_bowl_into_dumbwaiter
+DONE
+grasp_spoon
+put_spoon_back
+move_to_white_bowl
+move_to_blue_bowl
+move_to_gray_bowl
+
+- White bowl block the spoon, so you should pull the bowl closer before taking the spoon.
+- Blue bowl is too far to scoop, so you should pull the bowl closer before scooping.

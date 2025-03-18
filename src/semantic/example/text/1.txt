@@ -1,0 +1,38 @@
+Try your best to get more beans into the bowl with tofu pudding in one scoop. Put it into the dumbwaiter after you finish scooping.
+
+grasp_spoon
+move_to_white_bowl
+scoop
+move_to_blue_bowl
+drop_food
+put_spoon_back
+move_to_green_bowl
+pull_bowl_closer
+open_dumbwaiter
+move_to_blue_bowl
+put_bowl_into_dumbwaiter
+close_dumbwaiter
+start_dumbwaiter
+DONE
+
+white_bowl (with mung beans)
+green_bowl (with mung beans)
+blue_bowl (with tofu pudding)
+
+scoop
+stir
+drop_food
+pull_bowl_closer
+open_dumbwaiter
+close_dumbwaiter
+start_dumbwaiter
+put_bowl_into_dumbwaiter
+DONE
+grasp_spoon
+put_spoon_back
+move_to_white_bowl
+move_to_green_bowl
+move_to_blue_bowl
+
+- White bowl has more beans to scoop, so you should scoop from white bowl to green bowl.
+- Green bowl is too close to the dumbwaiter door, potentially obstructing the door from opening during execution.

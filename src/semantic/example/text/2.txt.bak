@@ -1,0 +1,41 @@
+Use knife to cut the food and fork it into the empty bowl, then put some beans on the food.
+
+take_tool (knife)
+move_to_white_cutting_board
+cut
+put_tool (knife)
+take_tool (fork)
+move_to_white_cutting_board
+fork
+move_to_blue_bowl
+put_food
+put_tool (fork)
+grasp_spoon
+move_to_yellow_bowl
+scoop
+move_to_blue_bowl
+put_food
+put_spoon_back
+DONE
+
+blue_bowl (empty)
+white_cutting_board (with butter)
+yellow_bowl (with green beans)
+white_round_plate (empty)
+
+put_spoon_back
+put_tool (fork)
+put_tool (knife)
+take_tool (knife)
+take_tool (fork)
+grasp_spoon
+move_to_blue_bowl
+move_to_yellow_bowl
+move_to_white_cutting_board
+move_to_white_round_plate
+cut
+fork
+scoop
+put_food
+pull_bowl_closer
+DONE

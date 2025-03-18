@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<robot name="spoon">
+    <link name="cube_spoon">
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.04 0.04 0.04"/>
+            </geometry>    
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.04 0.04 0.04"/>
+            </geometry>    
+        </collision>
+    </link>
+    
+    <link name="spoon">
+        <visual>
+            <origin xyz="0 0 -0.1" rpy="3.14 0 0"/>
+            <geometry>
+                <mesh filename="spoon.dae"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 -0.1" rpy="3.14 0 0"/>
+            <geometry>
+                <mesh filename="spoon.dae"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="0.5"/> 
+            <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+        </inertial>
+    </link>
+    <joint name="joint_name" type="fixed">
+        <parent link="cube_spoon"/>
+        <child link="spoon"/>
+    </joint>
+    
+</robot>

@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<robot name="bowl"> 
+    <link name="bowl">
+        <visual>
+            <origin xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="meshes/bowl_update.obj" scale="0.1 0.1 0.1"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="meshes/bowl_update.obj" scale="0.1 0.1 0.1"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="1"/> 
+            <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001"/>
+        </inertial>
+    </link>
+    <link name="tofu">
+        <visual>
+            <geometry>
+                <mesh filename="meshes/tofu.obj" scale="0.1 0.1 0.1"/>
+            </geometry>
+            <material name="tofu_color">
+                <color rgba="0.890 0.910 0.576 0.8"/>
+            </material>
+
+        </visual>
+        <inertial>
+            <mass value="0.00001"/> 
+            <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001"/>
+        </inertial>
+    </link>
+    <joint name="tofu_to_bowl" type="fixed">
+        <parent link="bowl"/>
+        <child link="tofu"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>  <!-- No offset, both origins are the same -->
+    </joint>
+
+</robot>
+        

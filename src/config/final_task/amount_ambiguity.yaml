@@ -1,0 +1,1225 @@
+amount_ambiguity:
+  1:
+    instruction: Transfer some toppings into the bowl with tofu pudding in one scoop, grabbing as many
+      as possible.
+    answer: [grasp_spoon, move_to_blue_bowl, scoop, move_to_white_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.523776191004169
+      y: -0.06729965174894995
+      type: bowl
+      color: blue
+      colorcode: deepskyblue
+      food:
+        type: ball
+        foodname: [red tanyuan]
+        colorcode: [lightcoral]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.42622134409282436
+      y: 0.20978411755425877
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.3559662233513329
+      y: -0.19422958926862446
+      type: bowl
+      color: green
+      colorcode: palegreen
+      food:
+        type: ball
+        foodname: [mung beans]
+        colorcode: [darkkhaki]
+        amount: 200
+        position: [1, 1]
+  2:
+    instruction: Transfer beans into the bowl with tofu pudding in one scoop, grabbing as many
+      as possible.
+    answer: [grasp_spoon, move_to_blue_bowl, scoop, move_to_white_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.523776191004169
+      y: -0.06729965174894995
+      type: bowl
+      color: blue
+      colorcode: cornflowerblue
+      food:
+        type: ball
+        foodname: [red beans]
+        colorcode: [brown]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.42622134409282436
+      y: 0.20978411755425877
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.3559662233513329
+      y: -0.19422958926862446
+      type: bowl
+      color: red
+      colorcode: darkred
+      food:
+        type: ball
+        foodname: [kidney beans]
+        colorcode: [coral]
+        amount: 200
+        position: [1, 1]
+  3:
+    instruction: Transfer food items into the bowl with tofu pudding in one scoop, grabbing as many
+      as possible.
+    answer: [grasp_spoon, move_to_blue_bowl, scoop, move_to_white_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.523776191004169
+      y: -0.06729965174894995
+      type: bowl
+      color: blue
+      colorcode: cornflowerblue
+      food:
+        type: ball
+        foodname: [purple sweet potato balls]
+        colorcode: [indigo]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.42622134409282436
+      y: 0.20978411755425877
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.3559662233513329
+      y: -0.19422958926862446
+      type: bowl
+      color: green
+      colorcode: palegreen
+      food:
+        type: ball
+        foodname: [kidney beans]
+        colorcode: [coral]
+        amount: 200
+        position: [1, 1]
+  4:
+    instruction: Add some toppings into the white bowl in one scoop. Try to collect the
+      most you can.
+    answer: [grasp_spoon, move_to_blue_bowl, scoop, move_to_white_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.49145591503060604
+      y: 0.21519852403283415
+      type: bowl
+      color: blue
+      colorcode: cornflowerblue
+      food:
+        type: ball
+        foodname: [mung beans]
+        colorcode: [darkkhaki]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.38833963544170697
+      y: -0.007623121209850342
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.5814992016007468
+      y: -0.12488934419083708
+      type: bowl
+      color: yellow
+      colorcode: darkgoldenrod
+      food:
+        type: ball
+        foodname: [taro balls]
+        colorcode: [plum]
+        amount: 200
+        position: [1, 1]
+  5:
+    instruction: Add some toppings into the white bowl in one scoop. Try to collect the
+      most you can.
+    answer: [grasp_spoon, move_to_blue_bowl, scoop, move_to_white_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.49145591503060604
+      y: 0.21519852403283415
+      type: bowl
+      color: blue
+      colorcode: cornflowerblue
+      food:
+        type: ball
+        foodname: [kidney beans]
+        colorcode: [coral]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.38833963544170697
+      y: -0.007623121209850342
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.5814992016007468
+      y: -0.12488934419083708
+      type: bowl
+      color: yellow
+      colorcode: darkgoldenrod
+      food:
+        type: ball
+        foodname: [bubble]
+        colorcode: [black]
+        amount: 200
+        position: [1, 1]
+  6:
+    instruction: Add some toppings into the white bowl in one scoop. Try to collect the
+      most you can.
+    answer: [grasp_spoon, move_to_red_bowl, scoop, move_to_white_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.49145591503060604
+      y: 0.21519852403283415
+      type: bowl
+      color: red
+      colorcode: darkred
+      food:
+        type: ball
+        foodname: [white tanyuan]
+        colorcode: [white]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.38833963544170697
+      y: -0.007623121209850342
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.5814992016007468
+      y: -0.12488934419083708
+      type: bowl
+      color: yellow
+      colorcode: darkgoldenrod
+      food:
+        type: ball
+        foodname: [red tanyuan]
+        colorcode: [lightcoral]
+        amount: 300
+        position: [1, 1]
+  7:
+    instruction: Move as many toppings as you can into the bowl with tofu pudding in one scoop.
+    answer: [grasp_spoon, move_to_blue_bowl, scoop, move_to_white_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.3780525115010564
+      y: 0.23261880385180475
+      type: bowl
+      color: blue
+      colorcode: cornflowerblue
+      food:
+        type: ball
+        foodname: [bubble]
+        colorcode: [black]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.3995879775994522
+      y: -0.021578292175264968
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.5831286921837066
+      y: 0.2343336348550294
+      type: bowl
+      color: purple
+      colorcode: indigo
+      food:
+        type: ball
+        foodname: [kidney beans]
+        colorcode: [coral]
+        amount: 300
+        position: [1, 1]
+    - x: 0.5676377990015876
+      y: -0.17072613076828308
+      type: bowl
+      color: pink
+      colorcode: pink
+      food:
+        type: ball
+        foodname: [purple sweet potato balls]
+        colorcode: [indigo]
+        amount: 200
+        position: [1, 1]
+  8:
+    instruction: Move as many taro balls as you can into the bowl containing tofu pudding in one scoop.
+    answer: [grasp_spoon, move_to_blue_bowl, scoop, move_to_white_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.3780525115010564
+      y: 0.23261880385180475
+      type: bowl
+      color: blue
+      colorcode: cornflowerblue
+      food:
+        type: ball
+        foodname: [taro balls]
+        colorcode: [plum]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.3995879775994522
+      y: -0.021578292175264968
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.5831286921837066
+      y: 0.2343336348550294
+      type: bowl
+      color: purple
+      colorcode: indigo
+      food:
+        type: ball
+        foodname: [taro balls]
+        colorcode: [plum]
+        amount: 200
+        position: [1, 1]
+  9:
+    instruction: Move as many food items as you can into the bowl containing tofu pudding in one scoop.
+    answer: [grasp_spoon, move_to_blue_bowl, scoop, move_to_white_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.3780525115010564
+      y: 0.23261880385180475
+      type: bowl
+      color: blue
+      colorcode: cornflowerblue
+      food:
+        type: ball
+        foodname: [red beans]
+        colorcode: [brown]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.3995879775994522
+      y: -0.021578292175264968
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.5831286921837066
+      y: 0.2343336348550294
+      type: bowl
+      color: purple
+      colorcode: indigo
+      food:
+        type: ball
+        foodname: [white tanyuan]
+        colorcode: [white]
+        amount: 300
+        position: [1, 1]
+    - x: 0.5676377990015876
+      y: -0.17072613076828308
+      type: bowl
+      color: pink
+      colorcode: pink
+      food:
+        type: ball
+        foodname: [taro balls]
+        colorcode: [plum]
+        amount: 200
+        position: [1, 1]
+  10:
+    instruction: Scoop the toppings from the fuller bowl and drop them into my pink bowl.
+    answer: [grasp_spoon, move_to_blue_bowl, scoop, move_to_pink_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.5497110671744756
+      y: 0.14203038059202547
+      type: bowl
+      color: blue
+      colorcode: navy
+      food:
+        type: ball
+        foodname: [bubble]
+        colorcode: [black]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.5404317279371718
+      y: -0.10799674830091138
+      type: bowl
+      color: pink
+      colorcode: pink
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.3535105564996841
+      y: 0.2137615640575916
+      type: bowl
+      color: red
+      colorcode: darkred
+      food:
+        type: ball
+        foodname: [taro balls]
+        colorcode: [plum]
+        amount: 200
+        position: [1, 1]
+  11:
+    instruction: Scoop the toppings from the fuller bowl and drop them into the bowl with tofu pudding.
+    answer: [grasp_spoon, move_to_blue_bowl, scoop, move_to_pink_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.5497110671744756
+      y: 0.14203038059202547
+      type: bowl
+      color: blue
+      colorcode: navy
+      food:
+        type: ball
+        foodname: [red tanyuan]
+        colorcode: [lightcoral]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.5404317279371718
+      y: -0.10799674830091138
+      type: bowl
+      color: pink
+      colorcode: pink
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.3535105564996841
+      y: 0.2137615640575916
+      type: bowl
+      color: red
+      colorcode: darkred
+      food:
+        type: ball
+        foodname: [purple sweet potato balls]
+        colorcode: [indigo]
+        amount: 250
+        position: [1, 1]
+  12:
+    instruction: Scoop the food items from the fuller bowl and drop them into my white
+      bowl.
+    answer: [grasp_spoon, move_to_blue_bowl, scoop, move_to_white_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.5497110671744756
+      y: 0.14203038059202547
+      type: bowl
+      color: blue
+      colorcode: navy
+      food:
+        type: ball
+        foodname: [taro balls]
+        colorcode: [plum]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.5404317279371718
+      y: -0.10799674830091138
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.3535105564996841
+      y: 0.2137615640575916
+      type: bowl
+      color: red
+      colorcode: darkred
+      food:
+        type: ball
+        foodname: [kidney beans]
+        colorcode: [coral]
+        amount: 200
+        position: [1, 1]
+  13:
+    instruction: Place bubble from the fuller bowl into the bowl containing tofu pudding in one scoop.
+    answer: [grasp_spoon, move_to_white_bowl, scoop, move_to_pink_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.5239589295897019
+      y: 0.09323494408835306
+      type: bowl
+      color: white
+      colorcode: seashell
+      food:
+        type: ball
+        foodname: [bubble]
+        colorcode: [black]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.3883652413880752
+      y: -0.11319595124727772
+      type: bowl
+      color: pink
+      colorcode: pink
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.36456900325860064
+      y: 0.22827010094899453
+      type: bowl
+      color: blue
+      colorcode: cornflowerblue
+      food:
+        type: ball
+        foodname: [bubble]
+        colorcode: [black]
+        amount: 200
+        position: [1, 1]
+  14:
+    instruction: Place toppings from the fuller bowl into the bowl containing tofu pudding in one scoop.
+    answer: [grasp_spoon, move_to_white_bowl, scoop, move_to_yellow_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.5239589295897019
+      y: 0.09323494408835306
+      type: bowl
+      color: white
+      colorcode: seashell
+      food:
+        type: ball
+        foodname: [taro balls]
+        colorcode: [plum]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.3883652413880752
+      y: -0.11319595124727772
+      type: bowl
+      color: yellow
+      colorcode: darkgoldenrod
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.36456900325860064
+      y: 0.22827010094899453
+      type: bowl
+      color: blue
+      colorcode: cornflowerblue
+      food:
+        type: ball
+        foodname: [white tanyuan]
+        colorcode: [white]
+        amount: 200
+        position: [1, 1]
+  15:
+    instruction: Place food items from the fuller bowl onto the tofu pudding in one scoop.
+    answer: [grasp_spoon, move_to_red_bowl, scoop, move_to_white_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.5239589295897019
+      y: 0.09323494408835306
+      type: bowl
+      color: red
+      colorcode: darkred
+      food:
+        type: ball
+        foodname: [bubble]
+        colorcode: [black]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.3883652413880752
+      y: -0.11319595124727772
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.36456900325860064
+      y: 0.22827010094899453
+      type: bowl
+      color: blue
+      colorcode: cornflowerblue
+      food:
+        type: ball
+        foodname: [white tanyuan]
+        colorcode: [white]
+        amount: 200
+        position: [1, 1]
+  16:
+    instruction: Place tanyuan from the bowl with more items into the blue bowl.
+    answer: [grasp_spoon, move_to_white_bowl, scoop, move_to_blue_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.5030713772663121
+      y: 0.07741780501860232
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: ball
+        foodname: [white tanyuan]
+        colorcode: [white]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.3798648421592727
+      y: -0.14766052844741626
+      type: bowl
+      color: blue
+      colorcode: navy
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.3559274552492892
+      y: 0.21350255721301037
+      type: bowl
+      color: orange
+      colorcode: coral
+      food:
+        type: ball
+        foodname: [white tanyuan]
+        colorcode: [white]
+        amount: 200
+        position: [1, 1]
+  17:
+    instruction: Place beans from the bowl with more items into the blue bowl.
+    answer: [grasp_spoon, move_to_white_bowl, scoop, move_to_blue_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.5030713772663121
+      y: 0.07741780501860232
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: ball
+        foodname: [red beans]
+        colorcode: [brown]
+        amount: 1400
+        position: [1, 1]
+    - x: 0.3798648421592727
+      y: -0.14766052844741626
+      type: bowl
+      color: blue
+      colorcode: cornflowerblue
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.3559274552492892
+      y: 0.21350255721301037
+      type: bowl
+      color: orange
+      colorcode: coral
+      food:
+        type: ball
+        foodname: [mung beans]
+        colorcode: [darkkhaki]
+        amount: 250
+        position: [1, 1]
+  18:
+    instruction: Place beans from the bowl with more items into the blue bowl.
+    answer: [grasp_spoon, move_to_white_bowl, scoop, move_to_blue_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.5030713772663121
+      y: 0.07741780501860232
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: ball
+        foodname: [kidney beans]
+        colorcode: [coral]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.3798648421592727
+      y: -0.14766052844741626
+      type: bowl
+      color: blue
+      colorcode: navy
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.3559274552492892
+      y: 0.21350255721301037
+      type: bowl
+      color: orange
+      colorcode: coral
+      food:
+        type: ball
+        foodname: [kidney beans]
+        colorcode: [coral]
+        amount: 200
+        position: [1, 1]
+  19:
+    instruction: Scoop taro balls as many as you can into my orange bowl in one scoop.
+    answer: [grasp_spoon, move_to_white_bowl, scoop, move_to_orange_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.5429599044050093
+      y: 0.2162794091672208
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: ball
+        foodname: [taro balls]
+        colorcode: [plum]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.43465242203711413
+      y: -0.006152980381296164
+      type: bowl
+      color: orange
+      colorcode: coral
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.5472522623261968
+      y: -0.18622161011701574
+      type: bowl
+      color: yellow
+      colorcode: yellow
+      food:
+        type: ball
+        foodname: [taro balls]
+        colorcode: [plum]
+        amount: 200
+        position: [1, 1]
+  20:
+    instruction: Scoop purple sweet potato balls as many as you can into my green bowl in one scoop.
+    answer: [grasp_spoon, move_to_white_bowl, scoop, move_to_green_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.5429599044050093
+      y: 0.2162794091672208
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: ball
+        foodname: [purple sweet potato balls]
+        colorcode: [indigo]
+        amount: 1400
+        position: [1, 1]
+    - x: 0.43465242203711413
+      y: -0.006152980381296164
+      type: bowl
+      color: green
+      colorcode: palegreen
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.5472522623261968
+      y: -0.18622161011701574
+      type: bowl
+      color: yellow
+      colorcode: yellow
+      food:
+        type: ball
+        foodname: [purple sweet potato balls]
+        colorcode: [indigo]
+        amount: 250
+        position: [1, 1]
+  21:
+    instruction: Scoop some food items as many as you can into my orange bowl in one scoop.
+    answer: [grasp_spoon, move_to_white_bowl, scoop, move_to_orange_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.5429599044050093
+      y: 0.2162794091672208
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: ball
+        foodname: [mung beans]
+        colorcode: [darkkhaki]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.43465242203711413
+      y: -0.006152980381296164
+      type: bowl
+      color: orange
+      colorcode: coral
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.5472522623261968
+      y: -0.18622161011701574
+      type: bowl
+      color: yellow
+      colorcode: yellow
+      food:
+        type: ball
+        foodname: [taro balls]
+        colorcode: [plum]
+        amount: 200
+        position: [1, 1]
+  22:
+    instruction: Please scoop food in the bowl with more items into my orange bowl.
+    answer: [grasp_spoon, move_to_green_bowl, scoop, move_to_orange_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.48677221518113867
+      y: 0.23459894711076126
+      type: bowl
+      color: orange
+      colorcode: coral
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.5641922592526655
+      y: -0.18742386422696175
+      type: bowl
+      color: blue
+      colorcode: cornflowerblue
+      food:
+        type: ball
+        foodname: [red tanyuan]
+        colorcode: [lightcoral]
+        amount: 200
+        position: [1, 1]
+    - x: 0.35341241509454224
+      y: -0.18118854093242748
+      type: bowl
+      color: green
+      colorcode: palegreen
+      food:
+        type: ball
+        foodname: [mung beans]
+        colorcode: [darkkhaki]
+        amount: 1600
+        position: [1, 1]
+  23:
+    instruction: Please scoop food in the bowl with more items into my pink bowl.
+    answer: [grasp_spoon, move_to_green_bowl, scoop, move_to_pink_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.48677221518113867
+      y: 0.23459894711076126
+      type: bowl
+      color: pink
+      colorcode: pink
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.5641922592526655
+      y: -0.18742386422696175
+      type: bowl
+      color: blue
+      colorcode: cornflowerblue
+      food:
+        type: ball
+        foodname: [taro balls]
+        colorcode: [plum]
+        amount: 200
+        position: [1, 1]
+    - x: 0.35341241509454224
+      y: -0.18118854093242748
+      type: bowl
+      color: green
+      colorcode: palegreen
+      food:
+        type: ball
+        foodname: [sweet potato balls]
+        colorcode: [darkorange]
+        amount: 1600
+        position: [1, 1]
+  24:
+    instruction: Please transfer as many beans as you can in one scoop from the bowl containing
+      more items to the bowl containing tofu pudding.
+    answer: [grasp_spoon, move_to_purple_bowl, scoop, move_to_yellow_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.531051415899402
+      y: -0.07958206827886287
+      type: bowl
+      color: purple
+      colorcode: violet
+      food:
+        type: ball
+        foodname: [red beans]
+        colorcode: [brown]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.36276206395504446
+      y: 0.1282465812000159
+      type: bowl
+      color: yellow
+      colorcode: darkgoldenrod
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.5740453664425764
+      y: 0.119328151946203
+      type: bowl
+      color: white
+      colorcode: seashell
+      food:
+        type: ball
+        foodname: [mung beans]
+        colorcode: [darkkhaki]
+        amount: 300
+        position: [1, 1]
+  25:
+    instruction: Please transfer a scoop of beans from the bowl containing
+      more items to the bowl containing tofu pudding.
+    answer: [grasp_spoon, move_to_purple_bowl, scoop, move_to_yellow_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.531051415899402
+      y: -0.07958206827886287
+      type: bowl
+      color: purple
+      colorcode: violet
+      food:
+        type: ball
+        foodname: [red beans]
+        colorcode: [brown]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.36276206395504446
+      y: 0.1282465812000159
+      type: bowl
+      color: yellow
+      colorcode: darkgoldenrod
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.5740453664425764
+      y: 0.119328151946203
+      type: bowl
+      color: blue
+      colorcode: navy
+      food:
+        type: ball
+        foodname: [kidney beans]
+        colorcode: [coral]
+        amount: 300
+        position: [1, 1]
+  26:
+    instruction: Scoop kidney beans from the bowl with more items to the bowl containing tofu pudding once.
+    answer: [grasp_spoon, move_to_purple_bowl, scoop, move_to_white_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.3661224652821734
+      y: -0.08503101118058826
+      type: bowl
+      color: purple
+      colorcode: mediumpurple
+      food:
+        type: ball
+        foodname: [kidney beans]
+        colorcode: [coral]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.3952964104349632
+      y: 0.21113184021365608
+      type: bowl
+      color: white
+      colorcode: seashell
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.5950680818012236
+      y: -0.1363566015344379
+      type: bowl
+      color: orange
+      colorcode: coral
+      food:
+        type: ball
+        foodname: [kidney beans]
+        colorcode: [coral]
+        amount: 300
+        position: [1, 1]
+    - x: 0.5904466556795169
+      y: 0.14288024848112596
+      type: bowl
+      color: yellow
+      colorcode: darkgoldenrod
+      food:
+        type: ball
+        foodname: [taro balls]
+        colorcode: [plum]
+        amount: 350
+        position: [1, 1]
+  27:
+    instruction: Scoop white tanyuan from the bowl with more items to the bowl with tofu pudding once.
+    answer: [grasp_spoon, move_to_purple_bowl, scoop, move_to_blue_bowl, drop_food,
+      put_spoon_back, DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.3661224652821734
+      y: -0.08503101118058826
+      type: bowl
+      color: purple
+      colorcode: mediumpurple
+      food:
+        type: ball
+        foodname: [white tanyuan]
+        colorcode: [white]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.3952964104349632
+      y: 0.21113184021365608
+      type: bowl
+      color: blue
+      colorcode: cornflowerblue
+      food:
+        type: None
+        foodname: []
+        colorcode: []
+        amount: 0
+        position: [1, 1]
+    - x: 0.5950680818012236
+      y: -0.1363566015344379
+      type: bowl
+      color: green
+      colorcode: palegreen
+      food:
+        type: ball
+        foodname: [white tanyuan]
+        colorcode: [white]
+        amount: 300
+        position: [1, 1]
+    - x: 0.5904466556795169
+      y: 0.14288024848112596
+      type: bowl
+      color: yellow
+      colorcode: darkgoldenrod
+      food:
+        type: ball
+        foodname: [red beans]
+        colorcode: [brown]
+        amount: 350
+        position: [1, 1]
+  28:
+    instruction: Can you transfer some toppings onto the tofu pudding in one scoop? Try
+      to get as many as you can.
+    answer: [grasp_spoon, move_to_gray_bowl, scoop, move_to_white_bowl, drop_food, put_spoon_back,
+      DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.54
+      y: -0.14
+      type: bowl
+      color: white
+      colorcode: white
+      food:
+        type: None
+        foodname: [red tanyuan]
+        colorcode: [lightcoral]
+        amount: 20
+        position: [1, 1]
+    - x: 0.54
+      y: 0.24
+      type: bowl
+      color: green
+      colorcode: green
+      food:
+        type: ball
+        foodname: [purple sweet potato balls]
+        colorcode: [indigo]
+        amount: 20
+        position: [1, 1]
+    - x: 0.39
+      y: 0.08
+      type: bowl
+      color: gray
+      colorcode: gray
+      food:
+        type: ball
+        foodname: [kidney beans]
+        colorcode: [coral]
+        amount: 1600
+        position: [1, 1]
+  29:
+    instruction: Please scoop food in the bowl with more items into my pink bowl.
+    answer: [grasp_spoon, move_to_yello_bowl, scoop, move_to_pink_bowl, drop_food, put_spoon_back,
+      DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.48
+      y: -0.13
+      type: bowl
+      color: yellow
+      colorcode: gold
+      food:
+        type: ball
+        foodname: [sweet potato balls]
+        colorcode: [darkorange]
+        amount: 1400
+        position: [1, 1]
+    - x: 0.45
+      y: 0.08
+      type: bowl
+      color: gray
+      colorcode: darkgray
+      food:
+        type: ball
+        foodname: [white tanyuan]
+        colorcode: [white]
+        amount: 200
+        position: [1, 1]
+    - x: 0.41
+      y: 0.27
+      type: bowl
+      color: pink
+      colorcode: violet
+      food:
+        type: None
+        foodname: [bubble]
+        colorcode: [black]
+        amount: 0
+        position: [1, 1]
+  30:
+    instruction: Please scoop tanyuan in the bowl with more items into my blue bowl.
+    answer: [grasp_spoon, move_to_yellow_bowl, scoop, move_to_blue_bowl, drop_food, put_spoon_back,
+      DONE]
+    tool: [spoon]
+    containers:
+    - x: 0.48
+      y: -0.13
+      type: bowl
+      color: yellow
+      colorcode: gold
+      food:
+        type: ball
+        foodname: [white tanyuan]
+        colorcode: [white]
+        amount: 1600
+        position: [1, 1]
+    - x: 0.45
+      y: 0.08
+      type: bowl
+      color: gray
+      colorcode: darkgray
+      food:
+        type: ball
+        foodname: [red tanyuan]
+        colorcode: [lightcoral]
+        amount: 400
+        position: [1, 1]
+    - x: 0.41
+      y: 0.27
+      type: bowl
+      color: blue
+      colorcode: cornflowerblue
+      food:
+        type: None
+        foodname: [taro balls]
+        colorcode: [plum]
+        amount: 0
+        position: [1, 1]

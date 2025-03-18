@@ -1,0 +1,32 @@
+Place two scoop of beans into purple bowl.
+
+grasp_spoon
+move_to_red_bowl
+scoop
+move_to_purple_bowl
+drop_food
+move_to_red_bowl
+scoop
+move_to_purple_bowl
+drop_food
+DONE
+
+red_bowl (with mung beans)
+purple_bowl (with tofu pudding)
+
+scoop
+stir
+drop_food
+pull_bowl_closer
+open_dumbwaiter
+close_dumbwaiter
+start_dumbwaiter
+put_bowl_into_dumbwaiter
+DONE
+grasp_spoon
+put_spoon_back
+move_to_purple_bowl
+move_to_red_bowl
+
+- This example demonstrate how scoops should be done.
+- Iteration 2 to 5 demonstrates how to scoop from red bowl to purlple bowl once, and iteration 6 to 9 repeats it.
