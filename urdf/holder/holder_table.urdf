@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<robot name="holder">
+    <link name="holder">
+        <visual>
+            <origin xyz="0.0 -0.35 0.55" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="holder.obj"/>
+            </geometry>
+        </visual>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="0.8 2 0.9"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0.0 -0.35 0.55" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="holder.obj"/>
+            </geometry>
+        </collision>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="0.8 2 0.9"/>
+            </geometry>
+        </collision>
+    </link>
+  </robot>

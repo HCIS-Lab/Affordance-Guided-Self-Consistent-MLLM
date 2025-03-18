@@ -1,0 +1,97 @@
+<?xml version="1.0" ?>
+<robot name="spoon">
+    <link name="cube_spoon">
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.04 0.04 0.04"/>
+            </geometry>    
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.04 0.04 0.04"/>
+            </geometry>    
+        </collision>
+    </link>
+    <link name="fix1">
+        <visual>
+            <origin xyz="0.016 0 0.02" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.008 0.08 0.02"/>
+            </geometry> 
+        </visual>
+        <collision>
+            <origin xyz="0.016 0 0.02" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.005 0.08 0.02"/>
+            </geometry>  
+        </collision>
+    </link>
+    <joint name="joint_name1" type="fixed">
+        <parent link="fix1"/>
+        <child link="cube_spoon"/>
+    </joint>
+    <link name="fix2">
+        <visual>
+            <origin xyz="-0.016 0 0.02" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.008 0.08 0.02"/>
+            </geometry> 
+        </visual>
+        <collision>
+            <origin xyz="-0.016 0 0.02" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.008 0.08 0.02"/>
+            </geometry>     
+        </collision>
+    </link>
+    <joint name="joint_name2" type="fixed">
+        <parent link="cube_spoon"/>
+        <child link="fix2"/>
+    </joint>
+
+    <link name="fix3">
+        <visual>
+            <origin xyz="0 0 0.04" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.042 0.042 0.01"/>
+            </geometry> 
+        </visual>
+        <collision>
+            <origin xyz="0 0 0.04" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.042 0.042 0.01"/>
+            </geometry>     
+        </collision>
+    </link>
+    <joint name="joint_name3" type="fixed">
+        <parent link="cube_spoon"/>
+        <child link="fix3"/>
+    </joint>
+
+    
+    <link name="spoon">
+        <visual>
+            <origin xyz="0 0 -0.1" rpy="3.14 0 0"/>
+            <geometry>
+                <mesh filename="spoon.dae"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 -0.1" rpy="3.14 0 0"/>
+            <geometry>
+                <mesh filename="spoon.dae"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="0.5"/> 
+            <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001"/>
+        </inertial>
+    </link>
+    <joint name="joint_name" type="fixed">
+        <parent link="cube_spoon"/>
+        <child link="spoon"/>
+    </joint>
+    
+</robot>
