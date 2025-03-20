@@ -23,40 +23,40 @@
 
 ## Setup
 - Install [Isaac Gym](https://developer.nvidia.com/isaac-gym/download) & Create Conda Environment
-```sh
+```
 conda activate rlgpu
 ```
 - Clone This Repo
-```sh
+```
 git clone https://github.com/HCIS-Lab/Affordance-Guided-Self-Consistent-MLLM.git
 ```
 - Install needed package.
 1. Please check the [website](https://pytorch.org/get-started/previous-versions/) to install pytorch according to your local device.
 3. Run pip install -r requirements.txt to install other package.
-```sh
+```
 cd Affordance-Guided-Self-Consistent-MLLM
 pip install -r requirements.txt
 ```
 
 ## Usage
 - Set API key of OpenAI
-```sh
+```
 export OPENAI_API_KEY=XXXXX
 ```
 
 - Run experiment of different pipelines and task types
-```sh
+```
 chmod +x run_experiment.sh
 run_experiment.sh -n <PIPELINE_NAME> [ -e <EXP_ID>] [-c <CONFIG_FILE] [-l <LOG_ROOT>] [-t <MAX_TRIALS>]
 ```
 
-```sh
+```
 # Run our method
 run_experiment.sh -n our
 ```
 
 - Collect trajectories of skills or manually control the robot
-```sh
+```
 python data_collection.py
 ```
 
