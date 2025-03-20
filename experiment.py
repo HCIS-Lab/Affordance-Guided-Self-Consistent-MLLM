@@ -88,7 +88,7 @@ def run_experiment(
     isaac_sim: IsaacSim, 
     decision_pipeline: Decision_pipeline,
     action_sequence_answer=[], 
-    test_type=None, 
+    pipeline_name=None, 
     use_vlm=False, 
     record_video=True
 ):
@@ -193,7 +193,6 @@ def run_experiment(
             isaac_sim.get_rgb_image(rgb_path)
             isaac_sim.get_depth_image(depth_path)
             decision_pipeline.set_obs_id()
-            pipeline_name = test_type
             if pipeline_name in pipeline_dict:
                 pipeline_func = pipeline_dict[pipeline_name]
                 params = {
@@ -208,7 +207,7 @@ def run_experiment(
                 params = {k: v for k, v in params.items() if k in param_names}
                 action_score = pipeline_func(**params)
             else:
-                raise ValueError(f"Unsupported test type {test_type}")
+                raise ValueError(f"Unsupported test type {pipeline_name}")
             
             best_action = max(action_score, key=action_score.get)
             action_idx += 1
@@ -273,7 +272,7 @@ def prepare_experiment(root, config_file):
 def main():
     root = os.environ.get('RESULT_DIR', 'experiment_result/test')
     config_file = os.environ.get('CONFIG_FILE', 'src/config/config.yaml')
-    test_type = os.environ.get('TEST_TYPE', None)
+    pipeline_name = os.environ.get('PIPELINE_NAME', None)
     task_type = os.environ.get('TASK_TYPE', None)
     env_idx = os.environ.get('ENV_IDX', 1)
     env_idx = int(env_idx) if env_idx else 1
@@ -292,7 +291,7 @@ def main():
         isaac_sim = IsaacSim(config)
         log_folder = os.path.join(root, f"{task_type}_{str(env_idx)}")
         decision_pipeline = Decision_pipeline(instruction, isaac_sim.containers_list, isaac_sim.tool_list, log_folder)
-        run_experiment(isaac_sim, decision_pipeline, test_type=test_type, action_sequence_answer=action_sequence_answer, use_vlm=True)
+        run_experiment(isaac_sim, decision_pipeline, pipeline_name=pipeline_name, action_sequence_answer=action_sequence_answer, use_vlm=True)
     
 if __name__ == "__main__":
     main()

@@ -7,10 +7,10 @@ CHECK_INTERVAL=5  # Time interval between checks (in seconds)
 NOW_TIME=$(LC_TIME=en_US.utf8 date +%Y%m%d_%H%M%S)
 # Function to display usage
 usage() {
-    echo "Usage: $0 -n <TEST_TYPE> [ -e <EXP_ID>] [-c <CONFIG_FILE] [-l <LOG_ROOT>] [-t <MAX_TRIALS>]"
+    echo "Usage: $0 -n <PIPELINE_NAME> [ -e <EXP_ID>] [-c <CONFIG_FILE] [-l <LOG_ROOT>] [-t <MAX_TRIALS>]"
     echo "  -e EXP_ID: Required. Experiment ID."
     echo "  -c CONFIG_FILE: Required. Path to your config file."
-    echo "  -n TEST_TYPE: Required. Type of test to run."
+    echo "  -n PIPELINE_NAME: Required. Type of test to run."
     echo "  -l LOG_ROOT: Optional. Path to experiment logs (default: $LOG_ROOT)."
     echo "  -t MAX_TRIALS: Optional. Number of trials to perform (default: $MAX_TRIALS)."
     echo "  -h: Show this help message."
@@ -22,7 +22,7 @@ while getopts "e:c:n:l:t:h" opt; do
     case $opt in
         e) EXP_ID=$OPTARG ;;
         c) CONFIG_FILE=$OPTARG ;;
-        n) TEST_TYPE=$OPTARG ;;
+        n) PIPELINE_NAME=$OPTARG ;;
         l) LOG_ROOT=$OPTARG ;;  # Override default LOG_ROOT if provided
         t) MAX_TRIALS=$OPTARG ;;  # Override default MAX_TRIALS if provided
         h) usage ;;
@@ -31,16 +31,16 @@ while getopts "e:c:n:l:t:h" opt; do
 done
 
 # Ensure required flags are provided
-if [ -z "$TEST_TYPE" ]; then
-    echo "Error: -n (TEST_TYPE) is required."
+if [ -z "$PIPELINE_NAME" ]; then
+    echo "Error: -n (PIPELINE_NAME) is required."
     usage
 fi
 
 # Path to results folder
 if [ -z "$EXP_ID" ]; then
-    RESULT_DIR="${LOG_ROOT}/${TEST_TYPE}_${NOW_TIME}"
+    RESULT_DIR="${LOG_ROOT}/${PIPELINE_NAME}_${NOW_TIME}"
 else
-    RESULT_DIR="${LOG_ROOT}/${TEST_TYPE}_${NOW_TIME}_${EXP_ID}"
+    RESULT_DIR="${LOG_ROOT}/${PIPELINE_NAME}_${NOW_TIME}_${EXP_ID}"
 fi
 
 echo "Results will be saved in $RESULT_DIR"
@@ -48,7 +48,7 @@ echo "Results will be saved in $RESULT_DIR"
 # Export environment variables for other scripts
 export RESULT_DIR=$RESULT_DIR
 export CONFIG_FILE=${CONFIG_FILE:-src/config/final_task/all.yaml}
-export TEST_TYPE=$TEST_TYPE
+export PIPELINE_NAME=$PIPELINE_NAME
 
 echo "Running experiment $EXP_ID with config file $CONFIG_FILE"
 sleep 1
