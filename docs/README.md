@@ -1,6 +1,10 @@
 # Mitigating Cross-Modal Distraction and Ensuring Geometric Feasibility via Affordance-Guided, Self-Consistent MLLMs for Food Preparation Task Planning
 
-[[paper](https://hcis-lab.github.io/Affordance-Guided-Self-Consistent-MLLM/static/pdfs/paper.pdf)] [[arXiv](https://arxiv.org/abs/2503.13055)] [[website](https://hcis-lab.github.io/Affordance-Guided-Self-Consistent-MLLM/)] 
+<p align="center">
+      [<a href="https://hcis-lab.github.io/Affordance-Guided-Self-Consistent-MLLM/static/pdfs/paper.pdf">paper</a>]
+      [<a href="https://arxiv.org/abs/2503.13055">arXiv</a>]
+      [<a href="https://hcis-lab.github.io/Affordance-Guided-Self-Consistent-MLLM/">website</a>]
+</p>
 
 ![teaser](static/images/teaser.png)
 
