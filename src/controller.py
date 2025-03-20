@@ -7,9 +7,9 @@ from typing import List
 from src.utils import euler_to_quaternion, quaternion_to_euler, orientation_error
 
 class Controller:
-    def __init__(self, isaac_sim):
-        self.isaac_sim = isaac_sim
-        self.device = isaac_sim.device
+    def __init__(self, isaac):
+        self.isaac = isaac
+        self.device = isaac.device
         self.current_action = 'idle'
         self.reset_action_stage()
         self.traj = []
@@ -49,8 +49,8 @@ class Controller:
             self.reset_action_stage()
         self.current_action = action
         
-        hand_pos:torch.tensor = self.isaac_sim.rb_state_tensor[self.isaac_sim.franka_hand_indices, :3]
-        hand_rot:torch.tensor = self.isaac_sim.rb_state_tensor[self.isaac_sim.franka_hand_indices, 3:7]
+        hand_pos:torch.tensor = self.isaac.rb_state_tensor[self.isaac.franka_hand_indices, :3]
+        hand_rot:torch.tensor = self.isaac.rb_state_tensor[self.isaac.franka_hand_indices, 3:7]
         
         if self.action_stage == -1:
             self.traj = self.get_trajectory(self.current_action)
@@ -94,84 +94,84 @@ class Controller:
         return dpose * self.get_delta(self.current_action, self.action_stage)
     
     def _gripper_control(self, wait_time=100):
-        gripper_open = self.isaac_sim.franka_dof_upper_limits[7:]
-        gripper_close = self.isaac_sim.franka_dof_lower_limits[7:]
+        gripper_open = self.isaac.franka_dof_upper_limits[7:]
+        gripper_close = self.isaac.franka_dof_lower_limits[7:]
         if self.current_action == 'grasp_spoon': 
             if self.action_stage < 1:
-                self.isaac_sim.pos_action[:, 7:9] = gripper_open
+                self.isaac.pos_action[:, 7:9] = gripper_open
             elif self.action_stage == 1:
                 if self._gripper_control_cnt < wait_time:
                     self._gripper_control_cnt += 1
-                    self.isaac_sim.pos_action[:, 7:9] = gripper_close
+                    self.isaac.pos_action[:, 7:9] = gripper_close
                     return True
             else:
-                self.isaac_sim.pos_action[:, 7:9] = gripper_close
+                self.isaac.pos_action[:, 7:9] = gripper_close
         elif self.current_action == 'put_spoon_back': # open at 4
             if self.action_stage < 3:
-                self.isaac_sim.pos_action[:, 7:9] = gripper_close
+                self.isaac.pos_action[:, 7:9] = gripper_close
             elif self.action_stage == 3:
                 if self._gripper_control_cnt < wait_time:
                     self._gripper_control_cnt += 1
-                    self.isaac_sim.pos_action[:, 7:9] = gripper_open
+                    self.isaac.pos_action[:, 7:9] = gripper_open
                     return True
             else:
-                self.isaac_sim.pos_action[:, 7:9] = gripper_open
+                self.isaac.pos_action[:, 7:9] = gripper_open
                 
         elif self.current_action == 'pull_bowl_closer': 
             if self.action_stage <= 1:
-                self.isaac_sim.pos_action[:, 7:9] = gripper_open
+                self.isaac.pos_action[:, 7:9] = gripper_open
             elif self.action_stage == 2:
                 if self._gripper_control_cnt < wait_time:
                     self._gripper_control_cnt += 1
-                    self.isaac_sim.pos_action[:, 7:9] = gripper_close
+                    self.isaac.pos_action[:, 7:9] = gripper_close
                     return True
             elif 2 < self.action_stage < 4:
-                self.isaac_sim.pos_action[:, 7:9] = gripper_close
+                self.isaac.pos_action[:, 7:9] = gripper_close
             elif self.action_stage == 4:
                 if self._gripper_control_cnt < wait_time:
                     self._gripper_control_cnt += 1
-                    self.isaac_sim.pos_action[:, 7:9] = gripper_open
+                    self.isaac.pos_action[:, 7:9] = gripper_open
                     return True
             else:
-                self.isaac_sim.pos_action[:, 7:9] = gripper_open
+                self.isaac.pos_action[:, 7:9] = gripper_open
                 
         elif self.current_action == 'open_dumbwaiter': # close from 2-7
             if self.action_stage < 1 or self.action_stage > 7:
-                self.isaac_sim.pos_action[:, 7:9] = gripper_open
+                self.isaac.pos_action[:, 7:9] = gripper_open
             elif self.action_stage == 1:
                 if self._gripper_control_cnt < wait_time:
                     self._gripper_control_cnt += 1
-                    self.isaac_sim.pos_action[:, 7:9] = gripper_close
+                    self.isaac.pos_action[:, 7:9] = gripper_close
                     return True
             else:
-                self.isaac_sim.pos_action[:, 7:9] = gripper_close
+                self.isaac.pos_action[:, 7:9] = gripper_close
         elif self.current_action == 'close_dumbwaiter': # close from 1-9
             if self.action_stage < 1 or self.action_stage > 9:
-                self.isaac_sim.pos_action[:, 7:9] = gripper_open
+                self.isaac.pos_action[:, 7:9] = gripper_open
             elif self.action_stage == 1:
                 if self._gripper_control_cnt < wait_time:
                     self._gripper_control_cnt += 1
-                    self.isaac_sim.pos_action[:, 7:9] = gripper_close
+                    self.isaac.pos_action[:, 7:9] = gripper_close
                     return True
             else:
-                self.isaac_sim.pos_action[:, 7:9] = gripper_close
+                self.isaac.pos_action[:, 7:9] = gripper_close
         elif self.current_action == 'put_bowl_into_dumbwaiter': # close from 2-7 and after 10
             if self.action_stage == 1:
                 if self._gripper_control_cnt < wait_time:
                     self._gripper_control_cnt += 1
-                    self.isaac_sim.pos_action[:, 7:9] = gripper_open
+                    self.isaac.pos_action[:, 7:9] = gripper_open
                     return True
             elif self.action_stage == 2:
                 if self._gripper_control_cnt < wait_time:
                     self._gripper_control_cnt += 1
-                    self.isaac_sim.pos_action[:, 7:9] = gripper_close
+                    self.isaac.pos_action[:, 7:9] = gripper_close
                     return True
             elif self.action_stage < 2 or self.action_stage > 7:
-                self.isaac_sim.pos_action[:, 7:9] = gripper_open
+                self.isaac.pos_action[:, 7:9] = gripper_open
             elif self.action_stage > 9:
-                self.isaac_sim.pos_action[:, 7:9] = gripper_open
+                self.isaac.pos_action[:, 7:9] = gripper_open
             else:
-                self.isaac_sim.pos_action[:, 7:9] = gripper_close
+                self.isaac.pos_action[:, 7:9] = gripper_close
         return False
     
     def get_delta(self, action: str, action_stage) -> float:
@@ -219,8 +219,8 @@ class Controller:
         if traj is None:
             raise NotImplementedError(f"Unsupport action: {action}")
             return []
-        hand_pos = self.isaac_sim.rb_state_tensor[self.isaac_sim.franka_hand_indices, :3]
-        hand_rot = self.isaac_sim.rb_state_tensor[self.isaac_sim.franka_hand_indices, 3:7]
+        hand_pos = self.isaac.rb_state_tensor[self.isaac.franka_hand_indices, :3]
+        hand_rot = self.isaac.rb_state_tensor[self.isaac.franka_hand_indices, 3:7]
         params = {
             "hand_pos": hand_pos,  
             "hand_rot": hand_rot,  
@@ -233,21 +233,21 @@ class Controller:
         return [torch.cat([pos, rot], dim=1) for pos, rot in zip(pos_set, rot_set)]
     
     def _move_traj(self, hand_rot, object):
-        object_type = "tool" if object in self.isaac_sim.tool_list else "container"
+        object_type = "tool" if object in self.isaac.tool_list else "container"
         indices_list = {
-            "tool": self.isaac_sim.tool_indices,
-            "container": self.isaac_sim.containers_indices
+            "tool": self.isaac.tool_indices,
+            "container": self.isaac.containers_indices
         }
         for key in indices_list[object_type].keys():
             if object in key:
                 object_indice = indices_list[object_type][key]
                 break
-        object_pos = self.isaac_sim.rb_state_tensor[object_indice, :3] + torch.tensor([-0.05, 0, 0.4], device=self.device)
+        object_pos = self.isaac.rb_state_tensor[object_indice, :3] + torch.tensor([-0.05, 0, 0.4], device=self.device)
         return [object_pos], [hand_rot]
     
     def _take_tool_traj(self, tool):
-        tool_pos = self.isaac_sim.rb_state_tensor[self.isaac_sim.tool_indices[tool], :3]
-        tool_rot = self.isaac_sim.rb_state_tensor[self.isaac_sim.tool_indices[tool], 3:7]
+        tool_pos = self.isaac.rb_state_tensor[self.isaac.tool_indices[tool], :3]
+        tool_rot = self.isaac.rb_state_tensor[self.isaac.tool_indices[tool], 3:7]
         rot = gymapi.Quat(tool_rot[:, 0], tool_rot[:, 1], tool_rot[:, 2], tool_rot[:, 3])
         roll, pitch, yaw = quaternion_to_euler(rot)
         roll += 3.14
@@ -265,8 +265,8 @@ class Controller:
         return pos_set, rot_set
     
     def _put_tool_traj(self, tool):
-        tool_pos = self.isaac_sim.tool_pose[tool].p
-        tool_rot = self.isaac_sim.tool_pose[tool].r
+        tool_pos = self.isaac.tool_pose[tool].p
+        tool_rot = self.isaac.tool_pose[tool].r
         rot = tool_rot
         roll, pitch, yaw = quaternion_to_euler(rot)
         roll += 3.14
@@ -512,8 +512,8 @@ class Controller:
     def _find_nearest_container(self, init_pos):
         min_dist = float("inf")
         best_tensor = init_pos
-        for indice in self.isaac_sim.containers_indices.values():
-            container_p = self.isaac_sim.rb_state_tensor[indice, :3]
+        for indice in self.isaac.containers_indices.values():
+            container_p = self.isaac.rb_state_tensor[indice, :3]
             container_p[..., -1] = 0
             # print(f"container pos: {container_p}, init pos: {init_pos}")
             dist = torch.norm(container_p - init_pos, dim=1)

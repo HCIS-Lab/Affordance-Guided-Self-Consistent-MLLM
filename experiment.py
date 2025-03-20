@@ -9,7 +9,7 @@ import inspect
 import torch
 from time import time
 
-from environment import IsaacSim
+from environment import Isaac
 from src.config.utils import get_task_type_list, get_task_env_num
 from src.controller import Controller
 from src.decision_pipeline import Decision_pipeline
@@ -85,7 +85,7 @@ def gt_pipeline(gt_action):
     return {gt_action: 1}
 
 def run_experiment(
-    isaac_sim: IsaacSim, 
+    isaac: Isaac, 
     decision_pipeline: Decision_pipeline,
     action_sequence_answer=[], 
     pipeline_name=None, 
@@ -105,30 +105,30 @@ def run_experiment(
     
     def get_our_pipeline_kwargs():
         # traj_dict = {action: controller.get_trajectory(action) for action in decision_pipeline.action_list}
-        holder_pos = torch.tensor([[0.412, -0.36, isaac_sim.default_height / 2 - 0.01]])
+        holder_pos = torch.tensor([[0.412, -0.36, isaac.default_height / 2 - 0.01]])
         nearest_container_holder = controller._find_nearest_container(holder_pos)
         distance_nearest_container_holder = torch.norm(holder_pos[:, :2] - nearest_container_holder[:, :2])
         
-        dumbwaiter_pos = isaac_sim.rb_state_tensor[isaac_sim.dumbwaiter_door_indices_rb, :3]
+        dumbwaiter_pos = isaac.rb_state_tensor[isaac.dumbwaiter_door_indices_rb, :3]
         nearest_container_dumbwaiter = controller._find_nearest_container(dumbwaiter_pos)
         # print(f"dumbwaiter pos: {dumbwaiter_pos}, nearest container: {nearest_container_dumbwaiter}")
         distance_nearest_dumbwaiter_holder = torch.norm(dumbwaiter_pos[:, :2] - nearest_container_dumbwaiter[:, :2])
         
         kwargs = {
-            # 'K': isaac_sim.get_camera_intrinsic(),
-            # 'extrinsic': isaac_sim.gym.get_camera_view_matrix(isaac_sim.sim, isaac_sim.envs[0], isaac_sim.camera_handles[0]),
-            # 'extrinsic': isaac_sim.get_camera_extrinsic(), 
+            # 'K': isaac.get_camera_intrinsic(),
+            # 'extrinsic': isaac.gym.get_camera_view_matrix(isaac.sim, isaac.envs[0], isaac.camera_handles[0]),
+            # 'extrinsic': isaac.get_camera_extrinsic(), 
             # 'traj_dict': traj_dict,
-            # 'cur_pose': isaac_sim.rb_state_tensor[isaac_sim.franka_hand_indices, :7],
-            # 'cur_joint': isaac_sim.dof_state[:, isaac_sim.franka_dof_indices, 0].squeeze(-1)[:, :7],
-            'target_container_pos': controller._find_nearest_container(isaac_sim.rb_state_tensor[isaac_sim.franka_hand_indices, :3]),
+            # 'cur_pose': isaac.rb_state_tensor[isaac.franka_hand_indices, :7],
+            # 'cur_joint': isaac.dof_state[:, isaac.franka_dof_indices, 0].squeeze(-1)[:, :7],
+            'target_container_pos': controller._find_nearest_container(isaac.rb_state_tensor[isaac.franka_hand_indices, :3]),
             'dis_holder': distance_nearest_container_holder,
             'dis_dumbwaiter': distance_nearest_dumbwaiter_holder,
         }
         return kwargs
 
     def get_our_affordance_agent_kwargs():
-        joint_limit = torch.tensor([x for x in zip(isaac_sim.franka_dof_lower_limits[:7], isaac_sim.franka_dof_upper_limits[:7])])
+        joint_limit = torch.tensor([x for x in zip(isaac.franka_dof_lower_limits[:7], isaac.franka_dof_upper_limits[:7])])
         kwargs = {
             'DH_params': [
                 {'a': 0, 'd': 0.333, 'alpha': 0},
@@ -140,13 +140,13 @@ def run_experiment(
                 {'a': 0.088, 'd': 0, 'alpha': np.pi/2}
             ],
             'joint_limit': joint_limit,
-            'base_pose': isaac_sim.rb_state_tensor[isaac_sim.franka_base_indices, :7],
-            'device': isaac_sim.device
+            'base_pose': isaac.rb_state_tensor[isaac.franka_base_indices, :7],
+            'device': isaac.device
         }
         return kwargs
     
-    isaac_sim.reset()
-    controller = Controller(isaac_sim)
+    isaac.reset()
+    controller = Controller(isaac)
     action_time_limit = 120 # sec
     start_wait = 2 # sec
     start = time()
@@ -178,20 +178,20 @@ def run_experiment(
         video_filename = os.path.join(decision_pipeline.log_folder, "result.mp4")
         out = cv2.VideoWriter(video_filename, codec, fps, resolution)
     
-    while not isaac_sim.gym.query_viewer_has_closed(isaac_sim.viewer):
-        isaac_sim.gym.simulate(isaac_sim.sim)
-        isaac_sim.gym.fetch_results(isaac_sim.sim, True)
-        isaac_sim.gym.render_all_camera_sensors(isaac_sim.sim)
+    while not isaac.gym.query_viewer_has_closed(isaac.viewer):
+        isaac.gym.simulate(isaac.sim)
+        isaac.gym.fetch_results(isaac.sim, True)
+        isaac.gym.render_all_camera_sensors(isaac.sim)
 
-        isaac_sim.gym.refresh_dof_state_tensor(isaac_sim.sim)
-        isaac_sim.gym.refresh_actor_root_state_tensor(isaac_sim.sim)
-        isaac_sim.gym.refresh_rigid_body_state_tensor(isaac_sim.sim)
-        isaac_sim.gym.refresh_jacobian_tensors(isaac_sim.sim)
+        isaac.gym.refresh_dof_state_tensor(isaac.sim)
+        isaac.gym.refresh_actor_root_state_tensor(isaac.sim)
+        isaac.gym.refresh_rigid_body_state_tensor(isaac.sim)
+        isaac.gym.refresh_jacobian_tensors(isaac.sim)
         
         
         if not executing and time() - start > start_wait:
-            isaac_sim.get_rgb_image(rgb_path)
-            isaac_sim.get_depth_image(depth_path)
+            isaac.get_rgb_image(rgb_path)
+            isaac.get_depth_image(depth_path)
             decision_pipeline.set_obs_id()
             if pipeline_name in pipeline_dict:
                 pipeline_func = pipeline_dict[pipeline_name]
@@ -215,7 +215,7 @@ def run_experiment(
             executing = True
             
         if record_video:
-            img = isaac_sim.gym.get_camera_image(isaac_sim.sim, isaac_sim.envs[0], isaac_sim.camera_handles[0], gymapi.IMAGE_COLOR).reshape(1080, 1920, 4)[:,:,:-1]
+            img = isaac.gym.get_camera_image(isaac.sim, isaac.envs[0], isaac.camera_handles[0], gymapi.IMAGE_COLOR).reshape(1080, 1920, 4)[:,:,:-1]
             frame = np.array(img)
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             out.write(frame)
@@ -233,35 +233,35 @@ def run_experiment(
             controller.reset_action_stage()
             action_start = time()
         
-        dpose = dpose.to(isaac_sim.device)
+        dpose = dpose.to(isaac.device)
         
         
-        isaac_sim.pos_action[:, :7] = isaac_sim.dof_state[:, isaac_sim.franka_dof_indices, 0].squeeze(-1)[:, :7] + isaac_sim.control_ik(dpose)
+        isaac.pos_action[:, :7] = isaac.dof_state[:, isaac.franka_dof_indices, 0].squeeze(-1)[:, :7] + isaac.control_ik(dpose)
     
-        test_dof_state = isaac_sim.dof_state[:, :, 0].contiguous()
-        test_dof_state[:, isaac_sim.franka_dof_indices] = isaac_sim.pos_action
+        test_dof_state = isaac.dof_state[:, :, 0].contiguous()
+        test_dof_state[:, isaac.franka_dof_indices] = isaac.pos_action
 
-        franka_actor_indices = isaac_sim.franka_indices.to(dtype=torch.int32)
-        isaac_sim.gym.set_dof_position_target_tensor_indexed(
-            isaac_sim.sim,
+        franka_actor_indices = isaac.franka_indices.to(dtype=torch.int32)
+        isaac.gym.set_dof_position_target_tensor_indexed(
+            isaac.sim,
             gymtorch.unwrap_tensor(test_dof_state),
             gymtorch.unwrap_tensor(franka_actor_indices),
             len(franka_actor_indices)
         )
 
         # update the viewer
-        isaac_sim.gym.step_graphics(isaac_sim.sim)
-        isaac_sim.gym.draw_viewer(isaac_sim.viewer, isaac_sim.sim, True)
+        isaac.gym.step_graphics(isaac.sim)
+        isaac.gym.draw_viewer(isaac.viewer, isaac.sim, True)
 
-        isaac_sim.gym.sync_frame_time(isaac_sim.sim)
+        isaac.gym.sync_frame_time(isaac.sim)
 
-        isaac_sim.frame += 1
+        isaac.frame += 1
     
     write_action_seq()
     if record_video:
         out.release()
-    isaac_sim.gym.destroy_viewer(isaac_sim.viewer)
-    isaac_sim.gym.destroy_sim(isaac_sim.sim)
+    isaac.gym.destroy_viewer(isaac.viewer)
+    isaac.gym.destroy_sim(isaac.sim)
 
 def prepare_experiment(root, config_file):
     print(f"Prepare experiment in {root}")
@@ -288,10 +288,10 @@ def main():
         config = read_yaml(config_file, task_type='obstacles', env_idx=16)
         instruction = config["instruction"] if config["instruction"] != "None" else ""
         action_sequence_answer = config["answer"] if config["answer"] != "None" else []
-        isaac_sim = IsaacSim(config)
+        isaac = Isaac(config)
         log_folder = os.path.join(root, f"{task_type}_{str(env_idx)}")
-        decision_pipeline = Decision_pipeline(instruction, isaac_sim.containers_list, isaac_sim.tool_list, log_folder)
-        run_experiment(isaac_sim, decision_pipeline, pipeline_name=pipeline_name, action_sequence_answer=action_sequence_answer, use_vlm=True)
+        decision_pipeline = Decision_pipeline(instruction, isaac.containers_list, isaac.tool_list, log_folder)
+        run_experiment(isaac, decision_pipeline, pipeline_name=pipeline_name, action_sequence_answer=action_sequence_answer, use_vlm=True)
     
 if __name__ == "__main__":
     main()

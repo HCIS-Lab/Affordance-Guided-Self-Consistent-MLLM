@@ -1,6 +1,6 @@
 import os
 import textwrap
-from environment import IsaacSim
+from environment import Isaac
 from src.config import *
 def render_all_config(config_file, show_text=False, force=False):
     task_types = get_task_type_list(config_file)
@@ -18,7 +18,7 @@ def render_all_config(config_file, show_text=False, force=False):
             print(img_filename)
             txt_filename = os.path.join(file_root, f"{task_type}_{env_idx}.txt")
             if force or not os.path.exists(img_filename):
-                Environment = IsaacSim(env_cfg_dict=config)
+                Environment = Isaac(env_cfg_dict=config)
                 answer_sequence = '\n'.join(config.get('answer', [])) 
                 instruction = textwrap.fill(config.get('instruction', ''))
                 text = f"{instruction}\n{answer_sequence}" if show_text else ""  

@@ -35,7 +35,7 @@ torch.pi = math.pi
 from src.ball_generator import Ball_generator
 from src.utils import euler_to_quaternion
 
-class IsaacSim():
+class Isaac():
     def __init__(self, env_cfg_dict):
         args = gymutil.parse_arguments(description="Joint control Methods Example")
         args.use_gpu = False
