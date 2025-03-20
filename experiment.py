@@ -10,6 +10,7 @@ import torch
 from time import time
 
 from environment import IsaacSim
+from src.config.utils import get_task_type_list, get_task_env_num
 from src.controller import Controller
 from src.decision_pipeline import Decision_pipeline
 from src.config.utils import read_yaml
@@ -262,15 +263,36 @@ def run_experiment(
         out.release()
     isaac_sim.gym.destroy_viewer(isaac_sim.viewer)
     isaac_sim.gym.destroy_sim(isaac_sim.sim)
-    
+
+def prepare_experiment(root, config_file):
+    print(f"Prepare experiment in {root}")
+    for task_type in get_task_type_list(config_file):
+        for env_idx in range(1, get_task_env_num(config_file, task_type)+1):
+            os.makedirs(os.path.join(root, f"{task_type}_{str(env_idx)}"), exist_ok=True)
+            
 def main():
-    config = read_yaml("./src/config/final_task/obstacles.yaml", task_type='obstacles', env_idx=16)
-    instruction = config["instruction"] if config["instruction"] != "None" else ""
-    action_sequence_answer = config["answer"] if config["answer"] != "None" else []
-    isaac_sim = IsaacSim(config)
-    log_folder = 'temp'
-    decision_pipeline = Decision_pipeline(instruction, isaac_sim.containers_list, isaac_sim.tool_list, log_folder)
-    run_experiment(isaac_sim, decision_pipeline, test_type='our', action_sequence_answer=action_sequence_answer, use_vlm=True)
+    root = os.environ.get('RESULT_DIR', 'experiment_result/test')
+    config_file = os.environ.get('CONFIG_FILE', 'src/config/config.yaml')
+    test_type = os.environ.get('TEST_TYPE', None)
+    task_type = os.environ.get('TASK_TYPE', None)
+    env_idx = os.environ.get('ENV_IDX', 1)
+    env_idx = int(env_idx) if env_idx else 1
+    
+    all_task = get_task_type_list(config_file)
+    excepted_task = []
+    specific_task = list(set(all_task) - set(excepted_task))
+    
+    if not os.path.exists(root):
+        prepare_experiment(root, config_file)
+        
+    if not specific_task or (task_type, env_idx) in specific_task or task_type in specific_task:
+        config = read_yaml(config_file, task_type='obstacles', env_idx=16)
+        instruction = config["instruction"] if config["instruction"] != "None" else ""
+        action_sequence_answer = config["answer"] if config["answer"] != "None" else []
+        isaac_sim = IsaacSim(config)
+        log_folder = os.path.join(root, f"{task_type}_{str(env_idx)}")
+        decision_pipeline = Decision_pipeline(instruction, isaac_sim.containers_list, isaac_sim.tool_list, log_folder)
+        run_experiment(isaac_sim, decision_pipeline, test_type=test_type, action_sequence_answer=action_sequence_answer, use_vlm=True)
     
 if __name__ == "__main__":
     main()
