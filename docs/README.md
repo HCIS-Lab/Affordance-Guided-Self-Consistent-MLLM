@@ -22,33 +22,50 @@
 - CPU (Tested on Intel COre i7-10700) -->
 
 ## Setup
-- Install Isaac Gym & Create Conda Environment
-- Clone This Repo
+- Install [Isaac Gym](https://developer.nvidia.com/isaac-gym/download) & Create Conda Environment
+```sh
+conda activate rlgpu
 ```
-$ git clone https://github.com/HCIS-Lab/Affordance-Guided-Self-Consistent-MLLM.git
+- Clone This Repo
+```sh
+git clone https://github.com/HCIS-Lab/Affordance-Guided-Self-Consistent-MLLM.git
 ```
 - Install needed package.
 1. Please check the [website](https://pytorch.org/get-started/previous-versions/) to install pytorch according to your local device.
-2. Run pip install -r requirements.txt to install other package.
-```
-$ pip install -r requirements.txt
+3. Run pip install -r requirements.txt to install other package.
+```sh
+cd Affordance-Guided-Self-Consistent-MLLM
+pip install -r requirements.txt
 ```
 
 ## Usage
-Check config file to adjust other parameters.
+- Set API key of OpenAI
+```sh
+export OPENAI_API_KEY=XXXXX
 ```
-python experiment.py
+
+- Run experiment of different pipelines and task types
+```
+chmod +x run_experiment.sh
+run_experiment.sh -n <PIPELINE_NAME> [ -e <EXP_ID>] [-c <CONFIG_FILE] [-l <LOG_ROOT>] [-t <MAX_TRIALS>]
 ```
 
 ```
+# Run our method
+run_experiment.sh -n our
+```
+
+- Collect trajectories of skills or manually control the robot
+```sh
 python data_collection.py
 ```
 
 ## TODO
 - [ ] Upload requirement.txt
+- [ ] Upload experimental log
 
 ## Acknowledgments
-The work is sponsored by the National Science and Technology Council (NSTC) under grants XXXX. 
+The work is sponsored by the National Science and Technology Council (NSTC) under grants 113-2813-C-A49-019-E. 
 
 Parts of this project page were adopted from the [Nerfies](https://nerfies.github.io/) page.
 
