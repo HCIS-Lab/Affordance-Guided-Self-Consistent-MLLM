@@ -45,12 +45,12 @@ export OPENAI_API_KEY=XXXXX
 ```
 
 - Run experiment of different pipelines and task types
-```
+```sh
 chmod +x run_experiment.sh
 run_experiment.sh -n <PIPELINE_NAME> [ -e <EXP_ID>] [-c <CONFIG_FILE] [-l <LOG_ROOT>] [-t <MAX_TRIALS>]
 ```
 
-```
+```sh
 # Run our method
 run_experiment.sh -n our
 ```
