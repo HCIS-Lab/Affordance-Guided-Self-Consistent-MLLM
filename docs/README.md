@@ -2,7 +2,7 @@
 
 [[paper](https://hcis-lab.github.io/Affordance-Guided-Self-Consistent-MLLM/static/pdfs/paper.pdf)] [[arXiv](https://arxiv.org/abs/2503.13055)] [[website](https://hcis-lab.github.io/Affordance-Guided-Self-Consistent-MLLM/)] 
 
-![teaser]("images/teaser.png")
+![teaser](images/teaser.png)
 
 
 <!-- ## Components
