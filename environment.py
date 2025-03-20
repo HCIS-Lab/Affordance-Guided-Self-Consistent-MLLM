@@ -20,27 +20,23 @@ An example that demonstrates various DOF control methods:
 from isaacgym import gymtorch
 from isaacgym import gymapi
 from isaacgym import gymutil
-from isaacgym.torch_utils import to_torch, quat_mul, quat_conjugate
+from isaacgym.torch_utils import to_torch
 
-import os
 import time
 import random
 import torch
 import numpy as np
 import math
-import cv2
-import inspect
 
-from time import time, sleep
+from time import time
 from PIL import Image, ImageDraw, ImageFont
 torch.pi = math.pi
 
-from src import Decision_pipeline, Ball_generator
+from src.ball_generator import Ball_generator
 from src.utils import euler_to_quaternion
-from src.config import read_yaml
 
 class IsaacSim():
-    def __init__(self, env_cfg_dict, log_folder=None, record_video=False):
+    def __init__(self, env_cfg_dict):
         args = gymutil.parse_arguments(description="Joint control Methods Example")
         args.use_gpu = False
         self.device = 'cuda:0' if args.use_gpu and torch.cuda.is_available() else "cpu"
@@ -89,10 +85,6 @@ class IsaacSim():
         
         # for trajectory collection
         self.record = []
-        
-        self.decision_pipeline = Decision_pipeline(self.containers_list, self.tool_list, log_folder=log_folder)
-        self.record_video = record_video 
-        self.log_folder = log_folder if log_folder is not None else "temp"
 
     
     def create_sim(self, args):
@@ -665,326 +657,17 @@ class IsaacSim():
         lmbda = torch.eye(6, device=self.device) * (damping ** 2)
         u = (j_eef_T @ torch.inverse(self.j_eef @ j_eef_T + lmbda) @ dpose).view(self.num_envs, 7)
         return u
-
-    def none_pipeline(self):
-        """None pipeline: Do nothing"""
-        return {self.decision_pipeline.random_action(): 1}
     
-    def vlm_pipeline(self, use_vlm=False):
-        """VLM pipeline: Get the best action from the score of VLM
-
-        Args:
-            use_vlm (bool, optional): Use VLM (GPT-4o) or not (GPT-3.5). Defaults to False.
-        """
-        rgb_path = os.path.join("observation", "rgb.png")
+    def get_rgb_image(self, rgb_path):
         rgb_image = self.gym.get_camera_image(self.sim, self.envs[0], self.camera_handles[0], gymapi.IMAGE_COLOR).reshape(1080, 1920, 4)[:,:,:-1]
         Image.fromarray(rgb_image).save(rgb_path)
-        semantic_score = self.decision_pipeline.get_semantic_score(self.instruction, rgb_path, self.action_sequence, use_vlm=use_vlm)
-        return semantic_score
-        
-    def cot_pipeline(self):
-        """COT pipeline: Get the best action from the score of Chain of Thought"""
-        
-        rgb_path = os.path.join("observation", "rgb.png")
-        rgb_image = self.gym.get_camera_image(self.sim, self.envs[0], self.camera_handles[0], gymapi.IMAGE_COLOR).reshape(1080, 1920, 4)[:,:,:-1]
-        Image.fromarray(rgb_image).save(rgb_path)
-        semantic_score = self.decision_pipeline.chain_of_thought_baseline(self.instruction, rgb_path, self.action_sequence, [])
-        return semantic_score
-    
-    def get_our_pipeline_kwargs(self):
-        traj_dict = {action: self.get_trajectory(action) for action in self.decision_pipeline.action_list}
-        holder_pos = torch.tensor([[0.412, -0.36, self.default_height / 2 - 0.01]])
-        nearest_container_holder = self.find_nearest_container(holder_pos)
-        distance_nearest_container_holder = torch.norm(holder_pos[:, :2] - nearest_container_holder[:, :2])
-        
-        dumbwaiter_pos = self.rb_state_tensor[self.dumbwaiter_door_indices_rb, :3]
-        nearest_container_dumbwaiter = self.find_nearest_container(dumbwaiter_pos)
-        print(f"dumbwaiter pos: {dumbwaiter_pos}, nearest container: {nearest_container_dumbwaiter}")
-        distance_nearest_dumbwaiter_holder = torch.norm(dumbwaiter_pos[:, :2] - nearest_container_dumbwaiter[:, :2])
-        
-        kwargs = {
-            # 'K': self.get_camera_intrinsic(),
-            # 'extrinsic': self.gym.get_camera_view_matrix(self.sim, self.envs[0], self.camera_handles[0]),
-            # 'extrinsic': self.get_camera_extrinsic(), 
-            # 'traj_dict': traj_dict,
-            # 'cur_pose': self.rb_state_tensor[self.franka_hand_indices, :7],
-            # 'cur_joint': self.dof_state[:, self.franka_dof_indices, 0].squeeze(-1)[:, :7],
-            'target_container_pos': self.find_nearest_container(self.rb_state_tensor[self.franka_hand_indices, :3]),
-            'dis_holder': distance_nearest_container_holder,
-            'dis_dumbwaiter': distance_nearest_dumbwaiter_holder,
-        }
-        return kwargs
-    
-    def get_our_affordance_agent_kwargs(self):
-        joint_limit = torch.tensor([x for x in zip(self.franka_dof_lower_limits[:7], self.franka_dof_upper_limits[:7])])
-        kwargs = {
-            'DH_params': [
-                {'a': 0, 'd': 0.333, 'alpha': 0},
-                {'a': 0, 'd': 0, 'alpha': -np.pi/2},
-                {'a': 0, 'd': 0.316, 'alpha': np.pi/2},
-                {'a': 0.0825, 'd': 0, 'alpha': np.pi/2},
-                {'a': -0.0825, 'd': 0.384, 'alpha': -np.pi/2},
-                {'a': 0, 'd': 0, 'alpha': np.pi/2},
-                {'a': 0.088, 'd': 0, 'alpha': np.pi/2}
-            ],
-            'joint_limit': joint_limit,
-            'base_pose': self.rb_state_tensor[self.franka_base_indices, :7],
-            'device': self.device
-        }
-        
-        return kwargs
-            
-    def our_pipeline(self, use_vlm=False, max_replan=5):
-        # self.instruction += f" {len(self.action_sequence) + 1}. "
-        rgb_path = os.path.join("observation", "rgb.png")
-        depth_path = os.path.join("observation", "depth.png")
-        rgb_image = self.gym.get_camera_image(self.sim, self.envs[0], self.camera_handles[0], gymapi.IMAGE_COLOR).reshape(1080, 1920, 4)[:,:,:-1]
+
+    def get_depth_image(self, depth_path):
         depth_image = self.gym.get_camera_image(self.sim, self.envs[0], self.camera_handles[0], gymapi.IMAGE_DEPTH)
         depth_image = np.clip(depth_image, -1.8, 0)
         depth_image = ((depth_image - np.min(depth_image)) / (np.max(depth_image) - np.min(depth_image)) * 255).astype(np.uint8)
-        Image.fromarray(rgb_image).save(rgb_path)
         Image.fromarray(depth_image).save(depth_path)
-        kwargs = self.get_our_pipeline_kwargs()
-        for _ in range(max_replan):
-            semantic_score = self.decision_pipeline.get_semantic_score(
-                self.instruction, 
-                rgb_path, 
-                self.action_sequence, 
-                use_affordance_info=True, 
-                use_vlm=use_vlm,
-                update_record=False,
-            )
-            best_action = max(semantic_score, key=semantic_score.get)
-            action_candidate = [best_action]
-            affordance_score = self.decision_pipeline.get_affordance_score(
-                rgb_path, 
-                depth_path, 
-                action_sequence=self.action_sequence, 
-                action_candidate=action_candidate,
-                with_info=True,
-                **kwargs
-            )
-            if affordance_score[best_action]:
-                self.decision_pipeline.update_record()
-                break
-            else:
-                self.decision_pipeline.clear_record()
-                continue
-        else:
-            best_action = 'REPLAN_ERROR'
-        return {best_action: 1}
-    
-    def gt_pipeline(self, gt_action):
-        """GT pipeline: Get the best action from the ground truth action
 
-        Args:
-            gt_action (str): Ground truth action
-
-        Returns:
-            dict: The best action
-        """
-        print(self.decision_pipeline.init_object_list)
-        gt_action = gt_action if gt_action else 'DONE'
-        return {gt_action: 1}
-    
-    def test_pipeline(
-        self, 
-        action_sequence_answer=[], 
-        calibration_collect=False, 
-        test_type=None, 
-        threshold=None, 
-        use_vlm=False, 
-        uncertainty_threshold=0.
-    ):
-        """Interface for testing pipeline
-
-        Args:
-            action_sequence_answer (List[str], optional): List of ground truth action. Defaults to None.
-            calibration_collect (bool, optional): Set to true if need to collect calibration dataset. Defaults to False.
-            test_type (str, optional): Surpported types: lap, saycan, vlm, knowno, cot, uncertainty_cot, our. Defaults to None.
-            threshold (float, optional): Uncertainty confidence level. Defaults to 0.
-            use_vlm (bool, optional): Set to true to use VLM as planning agent. Defaults to False.
-            uncertainty_threshold (float, optional): Uncertainty confidence level for COT. Defaults to 0.
-        """
-        def write_score(action_idx, total_action, human_help):
-            filename = os.path.join(self.log_folder, 'result.txt')
-            assert not os.path.exists(filename), FileExistsError(filename)
-            open(filename, 'w').write(f"{action_idx} / {total_action} = {float(action_idx) / float(total_action): .4f}\nHuman Help: {human_help}")
-        def write_action_seq():
-            filename = os.path.join(self.log_folder, 'result_sequence.txt')
-            open(filename, 'w').write('\n'.join(self.action_sequence))
-        
-        assert not calibration_collect or action_sequence_answer, "Please provide sequence answer when collecting calibration data"
-        assert bool(threshold) ^ (test_type not in ['lap', 'knowno']), "Please provide threshold when using LAP or KnowNo"
-        self.reset()
-        action_time_limit = 120 # sec
-        start_wait = 2 # sec
-        start = time()
-        self.action_start = time()
-        self.executing = False
-        best_action = None
-        action_idx = 0
-        total_action = len(action_sequence_answer) if action_sequence_answer else 0
-        max_sequence = 10 if len(action_sequence_answer) == 0 else len(action_sequence_answer) + 2
-        human_help = 0
-        affordance_list = {
-            'lap': 'lap',
-            'saycan': 'classifier',
-            'our': 'our',
-            'affordance': 'our'
-        }
-        pipeline_list = {
-            'lap': 'saycan',
-            'knowno': 'vlm',
-        }
-        
-        affordance_type = affordance_list.get(test_type, None)
-        kwargs = {}
-        if affordance_type == 'our':
-            kwargs = self.get_our_affordance_agent_kwargs()
-        self.decision_pipeline.set_affordance_agent(affordance_type, **kwargs)
-        
-        if self.record_video:
-            resolution = (1920, 1080)
-            codec = cv2.VideoWriter_fourcc(*'mp4v')
-            fps = 60.0
-            video_filename = os.path.join(self.log_folder, "result.mp4")
-            out = cv2.VideoWriter(video_filename, codec, fps, resolution)
-        
-        while not self.gym.query_viewer_has_closed(self.viewer):
-            self.gym.simulate(self.sim)
-            self.gym.fetch_results(self.sim, True)
-            self.gym.render_all_camera_sensors(self.sim)
-
-            self.gym.refresh_dof_state_tensor(self.sim)
-            self.gym.refresh_actor_root_state_tensor(self.sim)
-            self.gym.refresh_rigid_body_state_tensor(self.sim)
-            self.gym.refresh_jacobian_tensors(self.sim)
-            
-            
-            if not self.executing and time() - start > start_wait:
-                self.decision_pipeline.set_obs_id()
-                if calibration_collect:
-                    best_action = action_sequence_answer[action_idx]
-                    self.calibration_data_collection(best_action, use_vlm=use_vlm)
-                    if action_idx == total_action:
-                        break
-                else:
-                    pipeline_name = pipeline_list.get(test_type, test_type)
-                    if hasattr(self, f"{pipeline_name}_pipeline"):
-                        pipeline_func = getattr(self, f"{pipeline_name}_pipeline")
-                        params = {
-                            "use_vlm": use_vlm,  # Fixed parameter
-                            "uncertainty_threshold": uncertainty_threshold,  # Flexible parameter
-                            "gt_action": action_sequence_answer[action_idx] if action_sequence_answer else None
-                        }
-                        param_names = inspect.signature(pipeline_func).parameters.keys()
-                        params = {k: v for k, v in params.items() if k in param_names}
-                        action_score = pipeline_func(**params)
-                    else:
-                        raise ValueError(f"Unsupported test type {test_type}")
-                
-                if threshold is not None:
-                    # allow evaluation about human help
-                    best_action = [action for action, score in action_score.items() if score > threshold]
-                    if len(best_action) == 0:
-                        # LLM have no confidence in any action
-                        best_action = [max(action_score, key=action_score.get)]
-                    if action_sequence_answer[action_idx] in best_action:
-                        best_action = action_sequence_answer[action_idx]
-                        if len(best_action) > 1:
-                            human_help += 1
-                    else:
-                        write_score(action_idx, total_action, human_help)
-                        break
-                else:
-                    best_action = max(action_score, key=action_score.get)
-                action_idx += 1
-                print(best_action)
-                self.action_sequence.append(best_action)
-                self.executing = True
-                
-            if self.record_video:
-                img = self.gym.get_camera_image(self.sim, self.envs[0], self.camera_handles[0], gymapi.IMAGE_COLOR).reshape(1080, 1920, 4)[:,:,:-1]
-                frame = np.array(img)
-                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                out.write(frame)
-
-            dpose = torch.tensor([[[0.],[0.],[0.],[0.],[0.],[0.]]], device=self.device)
-
-            if best_action is None:
-                pass
-            elif best_action == "scoop":
-                dpose = self.scoop()
-            elif best_action == "stir":
-                dpose = self.stir()
-            elif best_action == "fork":
-                dpose = self.fork()
-            elif best_action == "cut":
-                dpose = self.cut()
-            elif best_action == "drop_food":
-                dpose = self.scoop_put()
-            elif best_action == "pull_bowl_closer":
-                dpose = self.pull_bowl_closer()
-            elif best_action == 'grasp_spoon':
-                dpose = self.take_tool('spoon')
-            elif best_action == 'put_spoon_back':
-                dpose = self.put_tool('spoon')
-            elif best_action == 'open_dumbwaiter':
-                dpose = self.open_dumbwaiter()
-            elif best_action == 'close_dumbwaiter':
-                dpose = self.close_dumbwaiter()
-            elif best_action == 'start_dumbwaiter':
-                dpose = self.start_dumbwaiter()
-            elif best_action == 'put_bowl_into_dumbwaiter':
-                dpose = self.put_bowl_into_dumbwaiter()
-            elif best_action == 'take_bowl_out_dumbwaiter':
-                raise NotImplementedError("Not implemented yet")
-                dpose = self.take_bowl_out_dumbwaiter()
-            elif best_action == "DONE" or best_action == 'REPLAN_ERROR' or len(self.action_sequence) >= max_sequence:
-                break 
-            elif "move" in best_action:
-                for object in self.containers_list:
-                    if object.split()[0] in best_action:
-                        dpose = self.move(object, slow=True)
-                        break
-            if best_action and time() - self.action_start > action_time_limit or not (True in self.is_acting.values()):
-                # print(f"{best_action} done")s
-                self.executing = False
-                self.action_state_reset()
-                self.action_start = time()
-            
-            
-            dpose = dpose.to(self.device)
-            
-            
-            self.pos_action[:, :7] = self.dof_state[:, self.franka_dof_indices, 0].squeeze(-1)[:, :7] + self.control_ik(dpose)
-       
-            test_dof_state = self.dof_state[:, :, 0].contiguous()
-            test_dof_state[:, self.franka_dof_indices] = self.pos_action
-
-            franka_actor_indices = self.franka_indices.to(dtype=torch.int32)
-            self.gym.set_dof_position_target_tensor_indexed(
-                self.sim,
-                gymtorch.unwrap_tensor(test_dof_state),
-                gymtorch.unwrap_tensor(franka_actor_indices),
-                len(franka_actor_indices)
-            )
-
-            # update the viewer
-            self.gym.step_graphics(self.sim)
-            self.gym.draw_viewer(self.viewer, self.sim, True)
-
-            self.gym.sync_frame_time(self.sim)
-
-            self.frame += 1
-        
-        write_action_seq()
-        if self.record_video:
-            out.release()
-        self.gym.destroy_viewer(self.viewer)
-        self.gym.destroy_sim(self.sim)
-        
     def render_config(self, file_path, text):
         self.reset()
         start = time()
@@ -1054,11 +737,7 @@ class IsaacSim():
         
         # for trajectory collection
         self.record = []
-    
-    @property
-    def instruction(self):
-        return self.env_cfg_dict["instruction"] if self.env_cfg_dict["instruction"] != "None" else ""
-    
+        
     @property
     def tool_list(self):
         return self.env_cfg_dict["tool"] if self.env_cfg_dict["tool"] != "None" else np.array(["spoon"])
@@ -1067,9 +746,3 @@ class IsaacSim():
     def container_config_list(self):
         return self.env_cfg_dict["containers"]
 
-if __name__ == "__main__":
-    config = read_yaml("./src/config/final_task/obstacles.yaml", task_type='obstacles', env_idx=16)
-    os.makedirs('temp', exist_ok=True)
-    isaac = IsaacSim(config, log_folder='temp')
-    isaac.data_collection()
-    # isaac.simulate()

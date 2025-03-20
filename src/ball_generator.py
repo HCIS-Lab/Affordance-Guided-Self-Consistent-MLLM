@@ -39,7 +39,3 @@ class Ball_generator(object):
         with open(file_name, "wb") as files:
             tree.write(files)
 
-
-if __name__ == "__main__":
-    urdfGenerator = Ball_generator()
-    urdfGenerator.generate(file_name=f"Environment/Weighing/BallHLS.urdf", ball_radius=0.01, ball_mass=0.001)

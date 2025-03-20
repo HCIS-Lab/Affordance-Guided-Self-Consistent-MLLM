@@ -1,13 +1,11 @@
 from isaacgym import gymapi
 from isaacgym import gymtorch
 
-import os
 import torch
-from time import time
 from PIL import Image
 
 from environment import IsaacSim
-from controller import Controller
+from src.controller import Controller
 from src.config.utils import read_yaml
 
 def set_keyboard(isaac_sim: IsaacSim, k_mode: str):
@@ -62,10 +60,8 @@ def set_keyboard(isaac_sim: IsaacSim, k_mode: str):
         isaac_sim.gym.subscribe_viewer_keyboard_event(isaac_sim.viewer, getattr(gymapi, f"KEY_{key_name}"), description)
     return action_list
 
-def main(k_mode='collect'):
-    config = read_yaml("./src/config/final_task/obstacles.yaml", task_type='obstacles', env_idx=16)
-    os.makedirs('temp', exist_ok=True)
-    isaac_sim = IsaacSim(config, log_folder='temp')
+def main(config, k_mode='collect'):
+    isaac_sim = IsaacSim(config)
     action_list = set_keyboard(isaac_sim, k_mode)
     isaac_sim.reset()
 
@@ -162,4 +158,5 @@ def main(k_mode='collect'):
     isaac_sim.gym.destroy_sim(isaac_sim.sim)
     
 if __name__ == "__main__":
-    main(k_mode='demo')
+    config = read_yaml("./src/config/final_task/obstacles.yaml", task_type='obstacles', env_idx=16)
+    main(config=config, k_mode='demo')

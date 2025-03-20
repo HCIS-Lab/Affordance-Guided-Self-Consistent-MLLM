@@ -1,9 +1,6 @@
 import os
-import datetime
-import sys
-
 import numpy as np
-sys.path.append('/home/hcis-s17/multimodal_manipulation/scoop_env')
+
 from src.semantic.openai_client import call_openai_api
 from src.semantic.utils import *
 from src.utils import encode_image, sort_scores_dict
@@ -273,17 +270,3 @@ def cot_baseline2(
         ]))
     
     return action_candidate_probs
-
-if __name__ == '__main__':
-    root = '/home/hcis-s17/multimodal_manipulation/scoop_env/'
-    instruction = "I need one scoop of green beans, and I'm in a hurry. Can you make it quick?"
-    container_list = ['white_bowl (with green beans)', 'red_bowl (with green beans)', 'skyblue_bowl (with green beans)', 'blue_bowl (with black beans)', 'yellow_bowl (empty)']
-    action_list = ['scoop', 'fork', 'cut', 'stir', 'put_food', 'pull_bowl_closer', 'DONE', 'grasp_spoon', 'take_tool (fork)', 'take_tool (knife)', 'put_spoon_back', 'put_tool (fork)', 'put_tool (knife)', 'move_to_white_bowl', 'move_to_red_bowl', 'move_to_skyblue_bowl', 'move_to_blue_bowl', 'move_to_yellow_bowl']
-    action_seq = ['grasp_spoon']
-    use_vlm = True
-    log_folder = f"{root}experiment_log/correction2/" + '{date:%Y-%m-%d_%H:%M:%S}'.format( date=datetime.datetime.now())
-    obs_id = 1
-    obs_url = encode_image(f'{root}experiment_log/archive/hard_9/20241120000205/observation_1.png')
-    action_candidate = ['move_to_white_bowl', 'move_to_red_bowl', 'move_to_skyblue_bowl']
-    probs = cot2(instruction, container_list, action_list, action_seq, use_vlm, obs_url=obs_url, log_folder=log_folder, obs_id=obs_id, action_candidate=action_candidate)
-    print(probs)

@@ -55,9 +55,6 @@ class Affordance_agent_ours(Affordance_agent):
         dis_dumbwaiter,
         action_candidate=[], 
     ):
-        # self.trajectory_clear(None, cur_pose, traj_dict['scoop'], [rgb_img_path], [gray_scale_img], K, [extrinsic])
-        print('Dis holder:', dis_holder)
-        print('Dis dumbwaiter:', dis_dumbwaiter)
         affordance = {action: 0 for action in action_candidate}
         spoon_on_hand = self.spoon_on_hand(action_seq)
         food_on_hand = spoon_on_hand and self.food_on_hand(action_seq)
@@ -290,9 +287,3 @@ class Affordance_agent_ours(Affordance_agent):
         w_dist = desired_quat[:, -1] - cur_quat[:, -1]
         w_dist = abs(w_dist)            
         return axis_dist, w_dist
-        
-if __name__ == '__main__':
-    agent = Affordance_agent_ours(None, None)
-    # rgb_img_path = '/home/hcis-s17/multimodal_manipulation/scoop_env/src/affordance/classifier/data/spoon/2/0_rgb/021.png'
-    # print(agent.spoon_on_hand(rgb_img_path, ['spoon', 'fork', 'knife']))
-    # print(agent.empty_hand(rgb_img_path))

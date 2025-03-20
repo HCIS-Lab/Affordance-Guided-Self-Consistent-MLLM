@@ -17,7 +17,8 @@ def get_action_list(tool_list, object_list):
     return action_list
 
 class Decision_pipeline():
-    def __init__(self, init_object_list, tool_list, log_folder) -> None:
+    def __init__(self, instruction, init_object_list, tool_list, log_folder) -> None:
+        self.instruction = instruction
         self.init_object_list = init_object_list
         self.action_list = get_action_list(tool_list, init_object_list)
         self.log_folder = log_folder
@@ -26,15 +27,17 @@ class Decision_pipeline():
         self.record = {}
         self._record_buffer = {}
         self.affordance_info_list = {}
+        self.action_sequence = []
     
     def set_affordance_agent(self, affordance_type, **kwargs):
         affordance_agent_list = {
-            # "classifier": Affordance_agent_classifier,
-            "lap": Affordance_agent_LAP,
             "our": Affordance_agent_ours
         } 
         self.affordance_agent = affordance_agent_list.get(affordance_type, Affordance_agent)(self.init_object_list, self.action_list, **kwargs)
     
+    def set_obs_id(self):
+        self.obs_id += 1
+        
     def random_action(self):
         return random.choice(self.action_list)
     
@@ -45,20 +48,21 @@ class Decision_pipeline():
         self.record = {}
         self._record_buffer = {}
     
+    def update_action_sequence(self, action):
+        self.action_sequence.append(action)
+        
     def chain_of_thought(
         self, 
-        instruction,
         observation_rgb_path,
-        action_sequence=None,
         action_candidate=[],
     ) -> dict:
         if not action_candidate: 
             action_candidate = self.action_list
         action_candidate_scores = cot(
-            instruction=instruction, 
+            instruction=self.instruction, 
             container_list=self.init_object_list, 
             action_list=self.action_list, 
-            action_seq=action_sequence, 
+            action_seq=self.action_sequence, 
             obs_url=encode_image(observation_rgb_path), 
             action_candidate=action_candidate, 
             log_folder=self.log_folder, 
@@ -69,18 +73,16 @@ class Decision_pipeline():
     
     def chain_of_thought_baseline(
         self, 
-        instruction,
         observation_rgb_path,
-        action_sequence=None,
         action_candidate=[],
     ) -> dict:
         if not action_candidate: 
             action_candidate = self.action_list
         action_candidate_scores = cot_baseline(
-            instruction=instruction, 
+            instruction=self.instruction, 
             container_list=self.init_object_list, 
             action_list=self.action_list, 
-            action_seq=action_sequence, 
+            action_seq=self.action_sequence, 
             obs_url=encode_image(observation_rgb_path), 
             action_candidate=action_candidate, 
             log_folder=self.log_folder, 
@@ -91,19 +93,24 @@ class Decision_pipeline():
     def get_affordance_score(
         self, 
         observation_rgb_path, 
-        observation_d_path, 
-        action_sequence=None, 
+        observation_d_path,
         action_candidate=[],
         with_info = False,
         **kwargs
     ):
         if len(action_candidate) == 0:
             action_candidate = self.action_list
-        affordance = self.affordance_agent.get_affordance(observation_rgb_path, observation_d_path, action_seq=action_sequence, action_candidate=action_candidate, **kwargs)
+        affordance = self.affordance_agent.get_affordance(
+            observation_rgb_path, 
+            observation_d_path, 
+            action_seq=self.action_sequence, 
+            action_candidate=action_candidate, 
+            **kwargs
+        )
         if with_info:
             info = self.affordance_agent.get_affordance_info()
             if info:
-                key = len(action_sequence) + 1
+                key = len(self.action_sequence) + 1
                 if key not in self.affordance_info_list:
                     self.affordance_info_list[key] = []
                 self.affordance_info_list[key].append(info)
@@ -114,14 +121,9 @@ class Decision_pipeline():
         print("=" * 20)
         return affordance
     
-    '''
-    this function.
-    '''
     def get_semantic_score(
         self, 
-        instruction, 
         observation_rgb_path, 
-        action_sequence=None, 
         use_vlm=False,
         use_affordance_info=False,
         segmentation_prompt=False,
@@ -140,10 +142,10 @@ class Decision_pipeline():
                 affordance_info_string.append(f'\t\tIn iteration {key}, {info_string}')
             additional_info['Previous Affordance Feedback'] = '\n' + '\n'.join(affordance_info_string)
         semantic, record = get_selection_score_openai(
-            instruction=instruction, 
+            instruction=self.instruction, 
             object_list=self.init_object_list, 
             action_list=self.action_list, 
-            action_seq=action_sequence, 
+            action_seq=self.action_sequence, 
             use_vlm=use_vlm,
             current_obs_url=obs_image,
             additional_info=additional_info,
@@ -157,8 +159,7 @@ class Decision_pipeline():
         self._record_buffer = record
         if update_record:
             self.update_record()
-            
-        # semantic = get_semantic_gemini(instruction, object_list, action_list, action_sequence)
+
         print(f"semantic {max(semantic, key=semantic.get)}")
         print(semantic)
         print("=" * 20)
@@ -166,15 +167,13 @@ class Decision_pipeline():
     
     def get_combined_score(
         self, 
-        instruction, 
         observation_rgb_path, 
         observation_d_path, 
-        action_sequence=None, 
         use_vlm=False, 
         action_candidate=[]
     ):
-        affordance = self.get_affordance_score(observation_rgb_path, observation_d_path, action_sequence, action_candidate)
-        semantic = self.get_semantic_score(instruction, observation_rgb_path, action_sequence, use_vlm)
+        affordance = self.get_affordance_score(observation_rgb_path, observation_d_path, self.action_sequence, action_candidate)
+        semantic = self.get_semantic_score(self.instruction, observation_rgb_path, self.action_sequence, use_vlm)
         score = {action: affordance[action] * semantic[action] for action in self.action_list}
         score = sort_scores_dict(score)
         open(os.path.join(self.log_folder, f"combined_{self.obs_id}.txt"), 'w').write(f"{score}")
@@ -183,9 +182,6 @@ class Decision_pipeline():
         print("=" * 20)
         
         return score
-    
-    def set_obs_id(self):
-        self.obs_id += 1
     
 if __name__ == "__main__":
     observation_rgb_path = 'affordance/data/spoon/30/0_rgb/000.png'
