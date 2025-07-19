@@ -37,6 +37,15 @@ def cot_pipeline(self, decision_pipeline: Decision_pipeline, rgb_path):
     semantic_score = decision_pipeline.chain_of_thought_baseline(rgb_path)
     return semantic_score
 
+def llmplanner_pipeline(
+    decision_pipeline: Decision_pipeline,
+    rgb_path, 
+    depth_path, 
+    use_vlm=False,
+    max_replan=5,
+    affordance_kwargs={}
+):
+    pass
         
 def our_pipeline(
     decision_pipeline: Decision_pipeline, 
@@ -262,12 +271,6 @@ def run_experiment(
         out.release()
     isaac.gym.destroy_viewer(isaac.viewer)
     isaac.gym.destroy_sim(isaac.sim)
-
-def prepare_experiment(root, config_file):
-    print(f"Prepare experiment in {root}")
-    for task_type in get_task_type_list(config_file):
-        for env_idx in range(1, get_task_env_num(config_file, task_type)+1):
-            os.makedirs(os.path.join(root, f"{task_type}_{str(env_idx)}"), exist_ok=True)
             
 def main():
     root = os.environ.get('RESULT_DIR', 'experiment_result/test')
@@ -278,20 +281,18 @@ def main():
     env_idx = int(env_idx) if env_idx else 1
     
     all_task = get_task_type_list(config_file)
-    excepted_task = []
-    specific_task = list(set(all_task) - set(excepted_task))
-    
-    if not os.path.exists(root):
-        prepare_experiment(root, config_file)
-        
-    if not specific_task or (task_type, env_idx) in specific_task or task_type in specific_task:
-        config = read_yaml(config_file, task_type='obstacles', env_idx=16)
-        instruction = config["instruction"] if config["instruction"] != "None" else ""
-        action_sequence_answer = config["answer"] if config["answer"] != "None" else []
-        isaac = Isaac(config)
-        log_folder = os.path.join(root, f"{task_type}_{str(env_idx)}")
-        decision_pipeline = Decision_pipeline(instruction, isaac.containers_list, isaac.tool_list, log_folder)
-        run_experiment(isaac, decision_pipeline, pipeline_name=pipeline_name, action_sequence_answer=action_sequence_answer, use_vlm=True)
+    if task_type not in all_task:
+        raise ValueError(f"Task type {task_type} not found in config file {config_file}. Available tasks: {all_task}")
+    log_folder = os.path.join(root, f"{task_type}_{str(env_idx)}")
+    os.makedirs("observation", exist_ok=True)
+    os.makedirs(log_folder, exist_ok=True)
+
+    config = read_yaml(config_file, task_type=task_type, env_idx=env_idx)
+    instruction = config["instruction"] if config["instruction"] != "None" else ""
+    action_sequence_answer = config["answer"] if config["answer"] != "None" else []
+    isaac = Isaac(config)
+    decision_pipeline = Decision_pipeline(instruction, isaac.containers_list, isaac.tool_list, log_folder)
+    run_experiment(isaac, decision_pipeline, pipeline_name=pipeline_name, action_sequence_answer=action_sequence_answer, use_vlm=True)
     
 if __name__ == "__main__":
     main()
